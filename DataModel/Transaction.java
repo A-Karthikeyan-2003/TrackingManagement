@@ -1,96 +1,102 @@
 package DataModel;
+import TrackingManagementSystem.OrderType;
+import TrackingManagementSystem.Status;
 public class Transaction {
     
-	private int TransactionId ;
+	private int transactionId ;
 	
-	private String Username,ProductName, Status= "Pending", Source= "",Destinations= "", CurrentLocation= "",DeliveryPersonName= "",SellerName= "";
-	private String type;
-	private int Quantity,rate;
+	
+	
+	private String username,productName, source= "",destinations= "", currentLocation= "",deliveryPersonName= "",sellerName= "";
+	private OrderType type;
+	private Status status;
+	private int quantity,rate;
 	
 
 
 
-	public Transaction(int transactionId, String username, String productName, String status, String source,
+	public Transaction(int transactionId, String username, String productName, Status status, String source,
 			String destinations,  String sellerName,
-			int quantity,String type,int rate) {
+			int quantity,OrderType type,int rate) {
 	
-		TransactionId =  transactionId;
-		Username =  username;
-		ProductName =  productName;
-		Status =  status;
-		Source =  source;
-		Destinations =  destinations;
-		SellerName =  sellerName;
-		Quantity =  quantity;
+		this.transactionId =  transactionId;
+		this.username =  username;
+		this.productName =  productName;
+		this.status =  status;
+		this.source =  source;
+		this.destinations =  destinations;
+		this.sellerName =  sellerName;
+		this.quantity =  quantity;
 		this.type =  type;
 		this.rate =  rate;
 		
 	}
 
-	
+
+
 	public int getRate() {
 		return rate;
 	}
 
 	public int getTransactionId() {
-		return TransactionId;
+		return transactionId;
 	}
 
 	public String getUsername() {
-		return Username;
+		return username;
 	}
 
 	public String getProductName() {
-		return ProductName;
+		return productName;
 	}
 
-	public String getStatus() {
-		return Status;
+	public Status getStatus() {
+		return this.status;
 	}
 
-	public void setStatus(String status) {
-		Status =  status;
+	public void setStatus(Status status) {
+		this.status =  status;
 	}
 
 	public String getSource() {
-		return Source;
+		return source;
 	}
 
 
 
 	public String getDestinations() {
-		return Destinations;
+		return destinations;
 	}
 
 	public String getCurrentLocation() {
-		return CurrentLocation;
+		return currentLocation;
 	}
 
 	public void setCurrentLocation(String currentLocation) {
-		CurrentLocation =  currentLocation;
+		this.currentLocation =  currentLocation;
 	}
 
 	public String getDeliveryPersonName() {
-		return DeliveryPersonName;
+		return deliveryPersonName;
 	}
 
 	public void setDeliveryPersonName(String deliveryPersonName) {
-		DeliveryPersonName =  deliveryPersonName;
+		this.deliveryPersonName =  deliveryPersonName;
 	}
 
 	public String getSellerName() {
-		return SellerName;
+		return sellerName;
 	}
 	
 	public int getQuantity() {
-		return Quantity;
+		return quantity;
 	}
 
-	public String getType() {
+	public OrderType getType() {
 		return type; // return order or place order ..
 	}
 
-	public void setType(String type) {
+	public void setType(OrderType type) {
 		this.type =  type;
 	}
 
@@ -100,10 +106,10 @@ public class Transaction {
 	
 	public String toString() {
 		
-		return "-----------------\n\nTransactionId = " + TransactionId + ", \nUsername = " + Username + ", \nProductName = " + ProductName
-				+ ", \nStatus = " + Status + ", \nSource = " + Source + ", \nDestinations = " + Destinations + ", \nCurrentLocation = "
-				+ CurrentLocation + ", \nDeliveryPersonName= " + DeliveryPersonName + ", \nSellerName= " + SellerName
-				+ ", \ntype = " + type + ", \nQuantity = " + Quantity +  " \nRate = " + rate + "";
+		return "-----------------\n\nTransactionId = " + transactionId + ", \nUsername = " + username + ", \nProductName = " + productName
+				+ ", \nStatus = " + status + ", \nSource = " + source + ", \nDestinations = " + destinations + ", \nCurrentLocation = "
+				+ currentLocation + ", \nDeliveryPersonName= " + deliveryPersonName + ", \nSellerName= " + sellerName
+				+ ", \ntype = " + type + ", \nQuantity = " + quantity +  " \nRate = " + rate + "";
 	}
 	
 

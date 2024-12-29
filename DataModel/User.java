@@ -5,13 +5,13 @@ import java.time.LocalDate;
 public class User implements UsersData{
 
 	
-	private String name,email,password,address,contact,dob;
+	private String name,email,password,address,contact,dateOfBirth;
 	
 	private int age,id;
 	
 	
 	
-	public User(String name, String email, String password, String address, String contact, String dob,
+	public User(String name, String email, String password, String address, String contact, String dateOfBirth,
 			int id) {
 	
 		this.name = name;
@@ -19,10 +19,10 @@ public class User implements UsersData{
 		this.password = password;
 		this.address = address;
 		this.contact = contact;
-		this.dob = dob;
+		this.dateOfBirth = dateOfBirth;
 		
 		try {
-		int y1 = Integer.parseInt(dob.substring(0,4));
+		int y1 = Integer.parseInt(dateOfBirth.substring(0,4));
 	    String cd =	 String.valueOf( LocalDate.now() );
 		int y2 = Integer.parseInt(cd.substring(0,4)  );
 		
@@ -105,9 +105,9 @@ public class User implements UsersData{
 	}
 
 	
-	public String getDob() {
+	public String getDateOfBirth() {
 		
-		return dob;
+		return dateOfBirth;
 	}
 
 	
@@ -119,8 +119,8 @@ public class User implements UsersData{
 
 	
 	public String toString() {
-		return "User [name=" + name + ", email=" + email + ", password=" + password + ", address=" + address
-				+ ", contact=" + contact + ", dob=" + dob + ", age=" + age + ", id=" + id + "]";
+		return "Name = " + name + ", Email = " + email + ", Password = " + password + ", Address = " + address
+				+ ", Contact = " + contact + ", Date Of Birth = " + dateOfBirth + ", Age = " + age + ", Id = " + id + "";
 	}
 
 	

@@ -4,24 +4,24 @@ import java.time.LocalDate;
 
 public class Seller implements UsersData {
 
-	private String name,email,password,address,contact,dob,store_document_id;
+	private String name,email,password,address,contact,dateOfBirth,storeDocumentId;
 	
 	private int age,id;
 	
 	
 	
-	public Seller(String name, String email, String password, String address, String contact, String dob,
-			String store_document_id, int id) {
+	public Seller(String name, String email, String password, String address, String contact, String dateOfBirth,
+			String storeDocumentId, int id) {
 	
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.address = address;
 		this.contact = contact;
-		this.dob = dob;
-		this.store_document_id = store_document_id;
+		this.dateOfBirth = dateOfBirth;
+		this.storeDocumentId = storeDocumentId;
 	try {
-		int y1 = Integer.parseInt(dob.substring(0,4));
+		int y1 = Integer.parseInt(dateOfBirth.substring(0,4));
 	    String cd =	 String.valueOf( LocalDate.now() );
 		int y2 = Integer.parseInt(cd.substring(0,4)  );
 		
@@ -105,9 +105,9 @@ public class Seller implements UsersData {
 	}
 
 	
-	public String getDob() {
+	public String getDateOfBirth() {
 		
-		return dob;
+		return dateOfBirth;
 	}
 
 	
@@ -117,16 +117,16 @@ public class Seller implements UsersData {
 	}
 
 
-	public String getStore_document_id() {
-		return store_document_id;
+	public String storeDocumentId() {
+		return storeDocumentId;
 	}
 
 
 	
 	public String toString() {
-		return "Seller [name=" + name + ", email=" + email + ", password=" + password + ", address=" + address
-				+ ", contact=" + contact + ", dob=" + dob + ", store_document_id=" + store_document_id + ", age=" + age
-				+ ", id=" + id + "]";
+		return "Seller Name = " + name + ", Email = " + email + ", Password = " + password + ", Address = " + address
+				+ ", Contact = " + contact + ", Date Of Birth = " + dateOfBirth + ", Store Document Id = " + storeDocumentId + ", Age = " + age
+				+ ", Id = " + id + "";
 	}
 	
 	

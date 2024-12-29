@@ -1,34 +1,36 @@
 package TrackingManagementSystem;
 
 import java.util.Scanner;
+
 import AccessService.DeliveryPersonAccessService;
 
-import DataModel.UsersData;
 import DataModel.DeliveryPerson;
-import DataModel.Transaction;
 
-final public class DeliveryPersonDash implements  Dashboards  {
+
+ public class DeliveryPersonDashboard implements  Dashboards  {
 
 	
-private DeliveryPerson uuu;
+	private DeliveryPerson deliveryPerson;
 	
-static Scanner ob = new Scanner(System.in);
+	Scanner scannerObject= new Scanner(System.in);
 
 
-DeliveryPersonAccessService ds ;
+	private DeliveryPersonAccessService deliveryPersonAccessService ;
  	
-    DeliveryPersonDash(TrackingManagement t ,UsersData u)
+    DeliveryPersonDashboard(DeliveryPersonAccessService deliveryPersonAccessService ,DeliveryPerson deliveryPerson)
 	{
-    	this.ds  = t;
+    	this.deliveryPersonAccessService  = deliveryPersonAccessService;
     	
     	
-		this.uuu= (DeliveryPerson) u;
+    	
+		this.deliveryPerson=  deliveryPerson;
 	}
     
     void myOrders() {
+    	
     	System.out.println("\n --- These are our assigned order details --- \n");
     	
-    	ds.viewTransaction(uuu );
+    	deliveryPersonAccessService.viewTransaction(deliveryPerson );
     
 
     }
@@ -39,26 +41,26 @@ DeliveryPersonAccessService ds ;
     	
     	System.out.println("Enter Transaction Id to change location : ");
 		
-		int oid = ob.nextInt();
+		int transactionId = scannerObject.nextInt();
 		
 		System.out.println( "Enter location to update : " );
 		
-		String loc = ob.next();
+		String location = scannerObject.next();
 		
 		
 		System.out.println("Do You Want to change complete status also  : ? 1.Yes \t 2. No");
-		int gh = ob.nextInt();
+		int changeComplete = scannerObject.nextInt();
 
-			if(gh==2) {
+			if(changeComplete==2) {
 				
-				ds.updateDeliveryLocation(oid, loc);
+				deliveryPersonAccessService.updateDeliveryLocation(transactionId, location);
 				
 	
 				
 			}
 			else {
 				
-				ds.updateDeliveryStatus(oid, loc);
+				deliveryPersonAccessService.updateDeliveryStatus(transactionId, location);
 				
 			}
 			
@@ -77,23 +79,23 @@ DeliveryPersonAccessService ds ;
     	
 		System.out.println("\n --- These are completed order details --- \n");
 		
-		ds.viewHistory( uuu );
+		deliveryPersonAccessService.viewHistory( deliveryPerson );
 		
 	
     }
     
-	public int Dash( ) {
+	public int dashboards( ) {
 	
 		
 		
 		while(true) {
 		
-		System.out.println("\nWelcome To " + uuu.getName() + "'s DashBoard \n");
+		System.out.println("\nWelcome To " + deliveryPerson.getName() + "'s DashBoard \n");
 		
 		System.out.println("Enter Options : \n1.My Orders\n2.Change Status Current Order\n3.History\n4.Report Orders\n5.Logout\n");
-		int ch = ob.nextInt();
+		int choice = scannerObject.nextInt();
 		
-		switch(ch)
+		switch(choice)
 		{
 		case 1:
 			myOrders();

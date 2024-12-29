@@ -16,7 +16,7 @@ public interface UsersData {
 	public abstract String getAddress();
 	public abstract String getContact();
 	public abstract int getAge();
-	public abstract String getDob();
+	public abstract String getDateOfBirth();
 	public abstract int getId();
 
 	

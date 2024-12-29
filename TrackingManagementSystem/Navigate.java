@@ -1,6 +1,11 @@
 package TrackingManagementSystem;
 
+import AccessService.AdminAccessService;
+import AccessService.DeliveryPersonAccessService;
+import AccessService.SellerAccessService;
+import AccessService.UserAccessService;
 import DataModel.Admin;
+
 import DataModel.DeliveryPerson;
 import DataModel.Seller;
 import DataModel.User;
@@ -8,25 +13,25 @@ import DataModel.UsersData;
 
 public class Navigate {
 
-	public static Dashboards navigation(TrackingManagement tm, UsersData user){
+	public static Dashboards navigation(TrackingManagement trackingManagement, UsersData user){
 		
-		Dashboards t = null ;
+		Dashboards dashboard = null ;
 		
 		if ( user instanceof Seller ) {
 			
-			t = new SellerDash(tm,user);
+			dashboard = new SellerDashboard( (SellerAccessService) trackingManagement, (Seller) user);
 			
 		} else if ( user instanceof User ) {
 			
-			t = new UserDash(tm,user);
+			dashboard = new UserDashboard( (UserAccessService) trackingManagement, (User) user);
 			
 		} else if (user instanceof DeliveryPerson ) {
 			
-			t = new DeliveryPersonDash(tm,user);
+			dashboard = new DeliveryPersonDashboard( (DeliveryPersonAccessService) trackingManagement, (DeliveryPerson) user);
 			
 		} else if (user instanceof Admin ) {
 			
-			t = new AdminDash(tm,user);
+			dashboard = new AdminDashboard( (AdminAccessService) trackingManagement, (Admin) user);
 			
 		} else {
 			
@@ -34,7 +39,7 @@ public class Navigate {
 			
 		}
 		
-		return t;
+		return dashboard;
 		
 	}
 	

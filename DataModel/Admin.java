@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 public class Admin implements UsersData{
 
-	private String name,email,password,address,contact,dob;
+	private String name,email,password,address,contact,dateOfBirth;
 	
 	private int age,id;
 	
 	
 	
-	public Admin(String name, String email, String password, String address, String contact, String dob,
+	public Admin(String name, String email, String password, String address, String contact, String dateOfBirth,
 			int id) {
 	
 		this.name = name;
@@ -18,10 +18,10 @@ public class Admin implements UsersData{
 		this.password = password;
 		this.address = address;
 		this.contact = contact;
-		this.dob = dob;
+		this.dateOfBirth = dateOfBirth;
 		
 		try {
-		int y1 = Integer.parseInt(dob.substring(0,4));
+		int y1 = Integer.parseInt(dateOfBirth.substring(0,4));
 	    String cd =	 String.valueOf( LocalDate.now() );
 		int y2 = Integer.parseInt(cd.substring(0,4)  );
 		
@@ -104,9 +104,9 @@ public class Admin implements UsersData{
 	}
 
 	
-	public String getDob() {
+	public String getDateOfBirth() {
 		
-		return dob;
+		return dateOfBirth;
 	}
 
 	

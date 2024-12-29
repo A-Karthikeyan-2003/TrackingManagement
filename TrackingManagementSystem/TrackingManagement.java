@@ -1,8 +1,8 @@
 package TrackingManagementSystem;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Calendar;
 import java.util.Scanner;
 
 import AccessService.AdminAccessService;
@@ -12,100 +12,107 @@ import AccessService.UserAccessService;
 import DataModel.Admin;
 import DataModel.DeliveryPerson;
 import DataModel.Package;
+import DataModel.Report;
 import DataModel.Seller;
 import DataModel.Transaction;
 import DataModel.User;
 import DataModel.UsersData;
+import ViewAction.DeliveryPersonView;
+import ViewAction.SellerView;
+import ViewAction.UserView;
+import ViewAction.ViewAction;
+
+
+
+
 
 public class TrackingManagement implements UserAccessService , AdminAccessService, SellerAccessService, DeliveryPersonAccessService  {
 
-	private UsersData user;
-	private Dashboards t;
+	private UsersData user = null;
+	private Dashboards dashboard;
+	
+	private static int userid = 0, deliverypersonid = 0, sellerid = 0, adminid=0, transactionid=0, packageid=0, reportid=0;
 
 	
-	static int userid = 0, deliverypersonid = 0, sellerid = 0, adminid=0, transactionid=0, packageid=0;
+	private  ArrayList<DataModel.User> usersList = new ArrayList<DataModel.User>();
+	
+	private  ArrayList<DataModel.Seller> sellerList = new ArrayList<DataModel.Seller>();
+	
+	private  ArrayList<DataModel.Admin> adminList = new ArrayList<DataModel.Admin>();
+	
+	private  ArrayList<DataModel.DeliveryPerson> deliveryPersonList = new ArrayList<DataModel.DeliveryPerson>();
 
-	
-	private  ArrayList<DataModel.User> usersObj = new ArrayList<DataModel.User>();
-	
-	private  ArrayList<DataModel.UsersData> account = new ArrayList<DataModel.UsersData>();
-	
-	private  ArrayList<DataModel.Seller> sellerObj = new ArrayList<DataModel.Seller>();
-	
-	private  ArrayList<DataModel.Admin> adminObj = new ArrayList<DataModel.Admin>();
-	
-	private  ArrayList<DataModel.DeliveryPerson> deliveryPersonObj = new ArrayList<DataModel.DeliveryPerson>();
+	private  ArrayList<DataModel.Package> packagesList = new ArrayList<DataModel.Package>();
 
-	private  ArrayList<DataModel.Package> packagesObj = new ArrayList<DataModel.Package>();
-
-	private  ArrayList<DataModel.Transaction> transactionObj = new ArrayList<DataModel.Transaction>();
+	private  ArrayList<DataModel.Transaction> transactionList = new ArrayList<DataModel.Transaction>();
+	
+	
+	private  ArrayList<DataModel.Report> reportList = new ArrayList<DataModel.Report>();
+	
 
 	
 	//-------------------------------------
 	
-	public TrackingManagement(){
-		
-	}
 	
 	
 	public void register() {
 
-		Scanner ob = new Scanner(System.in);
+		Scanner scannerObj = new Scanner(System.in);
 
 		System.out.println("Enter your name : ");
-		String name = ob.next();
+		String name = scannerObj.next();
 
 		System.out.println("Enter your Email : ");
-		String email = ob.next();
+		String email = scannerObj.next();
 
 		System.out.println("Enter your password : ");
-		String pass = ob.next();
+		String password = scannerObj.next();
 
 		System.out.println("Enter your contact : ");
-		String contact = ob.next();
+		String contact = scannerObj.next();
 
 		System.out.println("Enter your address : ");
-		String address = ob.next();
+		String address = scannerObj.next();
 
 		System.out.println("Enter your date of birth : (yyyy-mm-dd) ");
-		String dob = ob.next();
+		String dob = scannerObj.next();
 
 		System.out.println("Enter User Type : \t1.Seller\t2.DeliveryPerson\t3.User \t4.Admin\t");
-		int ut = ob.nextInt();
+		int userType = scannerObj.nextInt();
 
-		String c = "";
+		
 
-		if (ut == 1) {
+		if (userType == 1) {
 			
 			System.out.println("Enter Store Document ID : ");
-			String did = ob.next();
+			String storeDocumentId = scannerObj.next();
 
-			Seller ud = new Seller(name, email, pass, address, contact, dob, did, sellerid++);
-			sellerObj.add(ud);
-			account.add(ud);
+			Seller seller = new Seller(name, email, password, address, contact, dob, storeDocumentId, sellerid++);
+			sellerList.add(seller);
 			
-		} else if (ut == 2) {
+			
+		} else if (userType == 2) {
 			
 			System.out.println("Enter Driver License ID : ");
-			String did = ob.next();
+			String driverLicenseID = scannerObj.next();
 
-			DeliveryPerson ud = new DeliveryPerson(name, email, pass, address, contact, dob, did, deliverypersonid++);
-			deliveryPersonObj.add(ud);
-			 //ds.add(ud);
+			DeliveryPerson deliveryPerson = new DeliveryPerson(name, email, password, address, contact, dob, driverLicenseID, deliverypersonid++);
+			deliveryPersonList.add(deliveryPerson);
+			 
 			
-			account.add(ud);
+		
 
-		} else if (ut == 3) {
+		} else if (userType == 3) {
 
-			User ud = new User(name, email, pass, address, contact, dob, userid++);
-			usersObj.add(ud);
-			account.add(ud);
+			User buyer = new User(name, email, password, address, contact, dob, userid++);
+			usersList.add(buyer);
+		
 
-		} else if (ut == 4) {
+		} else if (userType == 4) {
 			
-			Admin ud = new Admin(name, email, pass, address, contact, dob, userid++);
-			adminObj.add(ud);
-			account.add(ud);
+			Admin admin = new Admin(name, email, password, address, contact, dob, adminid++);
+			adminList.add(admin);
+		
 			
 		} else {
 
@@ -119,91 +126,20 @@ public class TrackingManagement implements UserAccessService , AdminAccessServic
 
 	public  int login() {
 
-		Scanner ob = new Scanner(System.in);
+		Scanner scannerObj = new Scanner(System.in);
 
 		System.out.println("Enter your Email : ");
-		String email = ob.next();
+		String email = scannerObj.next();
 
 		System.out.println("Enter your password : ");
-		String pass = ob.next();
+		String password = scannerObj.next();
 		
-		UsersData user =null; //loginSystem(email,pass);
-
-		int c=0;
-		
-
-		for(int i=0; i<sellerObj.size(); i++)
-		{ UsersData ui = sellerObj.get(i);
-			if( ui.getEmail().equals(email) && ui.getPassword().equals(pass) )
-			{
-				user = ui;
-				c=1;
-				break;
-			}
-		}
-		
-		if( c!=1 )
-		{
-			for(int i=0; i<usersObj.size(); i++)
-			{ UsersData ui = usersObj.get(i);
-				if( ui.getEmail().equals(email) && ui.getPassword().equals(pass) )
-				{
-					user = ui;
-					c=1;
-					break;
-				}
-			}
-			
-		}
-		
-		if( c!=1 )
-		{
-			for(int i=0; i<deliveryPersonObj.size(); i++)
-			{ UsersData ui = deliveryPersonObj.get(i);
-				if( ui.getEmail().equals(email) && ui.getPassword().equals(pass) )
-				{
-					user = ui;
-					c=1;
-					break;
-				}
-			}
-			
-		}
-		
-		if( c!=1 )
-		{
-			for(int i=0; i<sellerObj.size(); i++)
-			{ UsersData ui = sellerObj.get(i);
-				if( ui.getEmail().equals(email) && ui.getPassword().equals(pass) )
-				{
-					user = ui;
-					c=1;
-					break;
-				}
-			}
-			
-		}
-		
-		if( c!=1 )
-		{
-			for(int i=0; i<adminObj.size(); i++)
-			{ UsersData ui = adminObj.get(i);
-				if( ui.getEmail().equals(email) && ui.getPassword().equals(pass) )
-				{
-					user = ui;
-					c=1;
-					break;
-				}
-			}
-			
-		}
-		
-		
+		user = LoginAuthenticate.authenticate(email, password, usersList, sellerList, deliveryPersonList, adminList);
 
 
-		if ( c==1 ) {
+		if ( user != null ) {
 
-			 t = Navigate.navigation(this,user);
+			dashboard= Navigate.navigation(this,user);
 			
 			
 			
@@ -211,7 +147,7 @@ public class TrackingManagement implements UserAccessService , AdminAccessServic
 			
 			
 			while (true) {
-				if (t.Dash() == 1) {
+				if (dashboard.dashboards() == 1) {
 					break;
 				}
 			}
@@ -220,8 +156,12 @@ public class TrackingManagement implements UserAccessService , AdminAccessServic
 
 		}
 
-	
-		return c;
+	if(user == null ) {
+		return 0;
+	}
+	else {
+		return -1;
+	}
 
 	}
 
@@ -231,125 +171,184 @@ public class TrackingManagement implements UserAccessService , AdminAccessServic
 	
 	//======================================   SELLER START    ===========================
 	
+
 	
-	
-	
-	
-	
-	public void addPackage( String proname, String protype, int proquantity,String proweight, String prorate, String sname, String address) {
+	public void addPackage( String packageName, String packageType, int packageQuantity,String packageWeight, String packageRate, String sellerName, String address) {
 		
-		Package pac = new Package( packageid++ , proname , protype ,proquantity,  proweight , prorate , sname , address  );
-		packagesObj.add(pac);
+		Package packages = new Package( packageid++ , packageName , packageType ,packageQuantity,  packageWeight , packageRate , sellerName , address  );
+		packagesList.add(packages);
 	}
 
 	
 	public Package getPackage(int id) {
 	
-		return packagesObj.get(id);
+		return packagesList.get(id);
 	}
 
-
-
-	
 
 	
 	
 	public void viewPakages() {
 		
-		System.out.println(packagesObj);
+		System.out.println(packagesList);
 	}
 
 
 	
-	 public void viewTransaction(Seller s) {
+	 public void viewTransaction(UsersData user) {
 		 
-		 for(int i=0; i<transactionObj.size(); i++)
+		ViewAction viewAction=null;
+		
+		 if( user instanceof Seller )
 		 {
-			 Transaction t = transactionObj.get(i);
-			 
-			 
-			 if( ( t.getSellerName().equals( s.getName()  ) ) && ( ( t.getStatus().equals("Processing") ) || t.getStatus().equals("Pending") )  )
-			 {
-				 
-				 if( t.getStatus().equals("Pending") ) {
-					 System.out.println( "\nTransactionId : " + t.getTransactionId() + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations()  + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() + "\nStatus : " + t.getStatus() + " \nUsername : " + t.getUsername()  ); 
-				
-				 }
-				 else {
-					 System.out.println( "\nTransactionId : " + t.getTransactionId()  + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations() + "\nDeliveryPersonName : " + t.getDeliveryPersonName() + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() + "Status : " + t.getStatus() + "Current Location : " + t.getCurrentLocation() + " \nUsername : " + t.getUsername()   ); 
-						 
-					 
-				 } 
-				 
-			 }
+			 viewAction = SellerView.getInstance();
+			
 		 }
 		 
-		
+		 
+		 if( user instanceof DeliveryPerson )
+		 {
+			 viewAction = DeliveryPersonView.getInstance();
+			 
+			 
+		 }
+	
+		 
+		 if( user instanceof User )
+		 {
+			 viewAction = UserView.getInstance();
+			 
+			
+		 }
+		 
+		 if(viewAction != null)
+		 {
+			 
+			 viewAction.viewTransaction(transactionList, user);
+		 
+		 }
+			 
 
-	} // history for seller and also track seller product ..
+	} 
 	
 	 
 	 
 	 
-	 public void viewHistory(Seller s) {
+	 
+	 
+	 public void viewHistory(UsersData user) {
 		 
-		 for(int i=0; i<transactionObj.size(); i++)
+		 
+		 ViewAction viewAction=null;
+			
+		 if( user instanceof Seller )
 		 {
-			 Transaction t = transactionObj.get(i);
-			 
-			 
-			 if( ( t.getSellerName().equals( s.getName()  ) ) && ( t.getStatus().equals("Completed") )  )
-			 {
-				 System.out.println( "\nTransactionId : " + t.getTransactionId() + "\nUsername : " + t.getUsername() + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations() + "\nDeliveryPersonName : " + t.getDeliveryPersonName() + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() ); 
-			 }
+			 viewAction = SellerView.getInstance();
+			
 		 }
 		 
+		 
+		 if( user instanceof DeliveryPerson )
+		 {
+			 viewAction = DeliveryPersonView.getInstance();
+			 
+			 
+		 }
+	
+		 
+		 if( user instanceof User )
+		 {
+			 viewAction = UserView.getInstance();
+			 
+			
+		 }
+		 
+		 if( viewAction != null)
+		 {
+			 
+			 viewAction.viewHistory(transactionList, user);
+	 
+		 }
 		 
 		 
 	 }
 
 	
 	
+ public void viewReport(UsersData user) {
+		 
+		 
+		 ViewAction viewAction=null;
+			
+		 if( user instanceof Seller )
+		 {
+			 viewAction = SellerView.getInstance();
+			
+		 }
+		 
+		 
+		 if( user instanceof DeliveryPerson )
+		 {
+			 viewAction = DeliveryPersonView.getInstance();
+			 
+			 
+		 }
+	
+		 
+		 if( user instanceof User )
+		 {
+			 viewAction = UserView.getInstance();
+			 
+			
+		 }
+		 
+		 if( viewAction != null)
+		 {
+			 
+			 viewAction.viewReport(reportList, user);
+	 
+		 }
+		 
+		 
+	 }
+
+	 
+	 
 	
 	//=================================    SELLER END   ==========================================
 	
 	
-//============================= USER START ======================
+ 	//============================= USER START ======================
 	
 	
 	public void addTransaction(int id, String uname,  String address, int quantity) {
 		
 		
+			Package packageObject = getPackage(id) ;
 		
 		
-		
-			Package proobj = getPackage(id) ;
-		
-		
-		int r=0;
+		int rate=0;
 		try {
-		 r = quantity * Integer.parseInt( proobj.getPackageRate() );
+			rate = quantity * Integer.parseInt( packageObject.getPackageRate() );
 		}
 		catch(Exception e)
 		{
 			System.out.println(e);
 		}
 
-		if(proobj!=null) {
+		if(packageObject!=null) {
 			
 
 
 			
-		int h = ( proobj.getPackageQuantity() ) -quantity;
+		int updatedQuantity = ( packageObject.getPackageQuantity() ) - quantity;
 		
-		updateQuantity(id, h);
+		updateQuantity(id, updatedQuantity);	 
 		
 		
+		Transaction transaction= new Transaction( transactionid++, uname , packageObject.getPackageName() , Status.PENDING , packageObject.getSellerLoc() ,address ,  packageObject.getSellerName() , quantity , OrderType.ORDER , rate  );
 		
-		 
-		Transaction t = new Transaction( transactionid++, uname , proobj.getPackageName() , "Pending" , proobj.getSellerLoc() ,address ,  proobj.getSellerName() , quantity , "OrderPlace" , r  );
-		
-		transactionObj.add(t);
+		transactionList.add(transaction);
 		System.out.println("Your Order Booked Successfully..");
 		}
 		else {
@@ -360,62 +359,68 @@ public class TrackingManagement implements UserAccessService , AdminAccessServic
 	
 	
 	
-	public void viewTransaction(User s) {
+	public void makeReport(  String reportDefinition , String reportTitle, int onTransactionId ,String name ) {
 		
+		Date currentTime = (Date) Calendar.getInstance().getTime(); 
+		Report report = new Report(reportid++, reportTitle, reportDefinition, onTransactionId , name,  String.valueOf(currentTime) ,  Status.PENDING );
 		
-		 for(int i=0; i<transactionObj.size(); i++)
-		 {
-			 Transaction t = transactionObj.get(i);
-			 
-			 
-			 if( ( t.getUsername().equals( s.getName()  ) ) && ( ( t.getStatus().equals("Processing") ) || t.getStatus().equals("Pending") )  )
-			 {
-				 if(t.getStatus().equals("Pending") ) {
-				 
-				 System.out.println( "\nTransactionId : " + t.getTransactionId() + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations()  + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() + "\nStatus : " + t.getStatus() + " \nSeller : " + t.getSellerName()  ); 
+		reportList.add(report);
+		
+		System.out.println("\nYour report was send to admin\n");
+		System.out.println("You will got a solution in few 2 days of times .. \n");
+		
+	
+
+	}
+	
+	public void makeReportReply( int replyId, String replyDef ) {
+		
+		Report reportObj=null;
+		
+		for(int i=0; i<reportList.size(); i++)
+		{
+			Report report = reportList.get(i);
 			
-				 }
-				 else {
-					 System.out.println( "\nTransactionId : " + t.getTransactionId()  + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations() + "\nDeliveryPersonName : " + t.getDeliveryPersonName() + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() + "Status : " + t.getStatus() + "Current Location : " + t.getCurrentLocation() ); 
-				 }
-				 
-				 }
-		 }
+			if( report.getReportId() == replyId )
+			{
+				reportObj = report;
+				break;
+			}
+		}
 		
 		
-	} 
-	
+		
+		Date currentTime = (Date) Calendar.getInstance().getTime(); 
+		
+		reportObj.setReplyDate(String.valueOf(currentTime));
+		reportObj.setReplyFromAdmin(replyDef);
+		
+		reportObj.setStatus(Status.COMPLETED);
+		
+		System.out.println("Report sended successfully");
+		
+		
+	}
 	
 
-	 public void viewHistory(User s) {
-		 
-
-		 
-		 for(int i=0; i<transactionObj.size(); i++)
+	public void returnPackage(int id, String location)
+	{
+		Transaction transaction = null;
+		 for(int i=0; i<transactionList.size(); i++)
 		 {
-			 Transaction t = transactionObj.get(i);
-			 
-			 
-			 if( ( t.getUsername().equals( s.getName()  ) ) && ( t.getStatus().equals("Completed") )  )
-			 {
-				 System.out.println( "\nTransactionId : " + t.getTransactionId() + "\nDeliveryPerson : " + t.getDeliveryPersonName() + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations() + "\nDeliveryPersonName : " + t.getDeliveryPersonName() + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() + "\nSeller Name : "+ t.getSellerName() ); 
-			 }
+			 transaction = transactionList.get(i);
+			 break;
 		 }
 		 
-		 
-	 }
-
+		 //transaction.setDeliveryPersonName(location);
+		 transaction.setType(OrderType.RETURN);
+		 transaction.setStatus(Status.PENDING);
+	}
 	
-	// TRACK AND HISTORY 
-
-
-
-	
-	
-	public void updateQuantity(int id, int q ) {
-		Package f = packagesObj.get(id);
+	public void updateQuantity(int id, int quantity ) {
+		Package packages = packagesList.get(id);
 		
-		f.setPackageQuantity(q);
+		packages.setPackageQuantity(quantity);
 	}
 
 	
@@ -430,67 +435,24 @@ public class TrackingManagement implements UserAccessService , AdminAccessServic
 	
 	// =========================   DELIVERY PERSON START    ========
 	
-	
-	public void viewTransaction(DeliveryPerson dp ) {
-		
-		
-		 for(int i=0; i<transactionObj.size(); i++)
-		 {
-			 Transaction t = transactionObj.get(i);
-			 
-			 
-			 if( ( t.getDeliveryPersonName().equals( dp.getName()  ) ) && ( ( t.getStatus().equals("Processing") ) )  )
-			 {
-	 
-				 System.out.println( "\nTransactionId : " + t.getTransactionId() + "\nUsername : " + t.getUsername() + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations() + "\nDeliveryPersonName : " + t.getDeliveryPersonName() + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() + "\nStatus : " + t.getStatus() + "\nSource : " + t.getSource() + "\nSeller Name : " + t.getSellerName() + "Current Location : " + t.getCurrentLocation());
 
-			 }
-		 }
-		 
+	public void updateDeliveryLocation(int id, String location) {
 	
-	} // VIEW MY ORDER AND ALSO HISTORY
-
-	
-
-	public void updateDeliveryLocation(int id, String loc) {
-	
-		Transaction g =	transactionObj.get(id);
+		Transaction transaction =	transactionList.get(id);
 		
-		g.setCurrentLocation(loc);
+		transaction.setCurrentLocation(location);
 	}
 
 
-	public void updateDeliveryStatus(int id, String loc) {
+	public void updateDeliveryStatus(int id, String location) {
 		
-		Transaction g =	transactionObj.get(id);
+		Transaction transaction =	transactionList.get(id);
 		
-		g.setCurrentLocation(loc);
-		g.setStatus("Completed");
+		transaction.setCurrentLocation(location);
+		transaction.setStatus(Status.COMPLETED);
 		
 	
 	}
-
-	
-	 public void viewHistory(DeliveryPerson s) {
-		 
-		 
-		 
-		 for(int i=0; i<transactionObj.size(); i++)
-		 {
-			 Transaction t = transactionObj.get(i);
-			 
-			 
-			 if( ( t.getDeliveryPersonName().equals( s.getName()  ) ) && ( t.getStatus().equals("Completed") )  )
-			 {
-				 System.out.println( "\nTransactionId : " + t.getTransactionId()  + "\nProductName : " + t.getProductName() +  "\nDestination : " + t.getDestinations() + "\nQuantity : " + t.getQuantity() + "\nRate : " + t.getRate() + "\nSeller : " +  t.getSellerName() + "\nSource : " + t.getSource() + "\nUsername : " + t.getUsername() + "\nOrder Type : " + t.getType() ); 
-			 }
-		 }
-		 
-	
-		 
-	 }
-
-	
 	
 	//============================== DELIVERY PERSON END    ===========
 
@@ -500,11 +462,11 @@ public class TrackingManagement implements UserAccessService , AdminAccessServic
 	
 public void viewTransaction() {
 		
-		for(int i=0; i<transactionObj.size(); i++)
+		for(int i=0; i<transactionList.size(); i++)
 		{
-			System.out.println("------\n");
-			System.out.println( transactionObj.get(i).toString() );
-			System.out.println("------\n");
+			System.out.println("------------------------------------------\n");
+			System.out.println( transactionList.get(i).toString() );
+			System.out.println("------------------------------------------\n");
 		}
 		
 		
@@ -513,11 +475,11 @@ public void viewTransaction() {
 
 public void viewDeliveryPersons() {
 	
-	for(int i=0; i<deliveryPersonObj.size(); i++ ) { 
+	for(int i=0; i<deliveryPersonList.size(); i++ ) { 
 		
-	System.out.println("------\n");
-	System.out.println(deliveryPersonObj.get(i));
-	System.out.println("------\n");
+	System.out.println("------------------------------------------\n");
+	System.out.println(deliveryPersonList.get(i));
+	System.out.println("------------------------------------------\n");
 	
 	}	
 	
@@ -526,12 +488,30 @@ public void viewDeliveryPersons() {
 
 	
 
-public void assignOrders(int Orderid, String DeliveryPersonName) {
+public void assignOrders(int orderId, String deliveryPersonName) {
 	
-	Transaction t = transactionObj.get(Orderid);
+	Transaction transaction = transactionList.get(orderId);
 	
-	t.setDeliveryPersonName(DeliveryPersonName);
-	t.setStatus("Processing");
+	transaction.setDeliveryPersonName(deliveryPersonName);
+	
+	DeliveryPerson deliveryPerson = null;
+	
+	for(int i=0; i<deliveryPersonList.size(); i++)
+	{
+		DeliveryPerson deliveryPerson1 = deliveryPersonList.get(i);
+		
+		if( deliveryPerson1.getName().equals(deliveryPersonName) )
+		{
+			deliveryPerson = deliveryPerson1;
+			break;
+		}
+	
+	}
+	
+	deliveryPerson.setAvailableStatus(false);
+	
+	transaction.setStatus(Status.PROCESSING);
+	
 	
 	
 }
@@ -539,8 +519,10 @@ public void assignOrders(int Orderid, String DeliveryPersonName) {
 
 public String getDeliveryPersonName(int id) {
 	
-	return deliveryPersonObj.get(id).getName();
+	return deliveryPersonList.get(id).getName();
 }
+
+
 
 
 

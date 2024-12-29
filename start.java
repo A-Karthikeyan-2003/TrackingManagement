@@ -5,45 +5,34 @@ import TrackingManagementSystem.TrackingManagement;
 
 public class start  {
 
-	 
 	
-	  
-
-
 	public static void main(String[] args) {
 		
-		Scanner ob =new Scanner(System.in);
-		TrackingManagement tt = new TrackingManagement();
+		Scanner scannerObj =new Scanner(System.in);
+		TrackingManagement transactionManagementObj = new TrackingManagement();
 	
 		while(true)
 		{
-			
-			
-			
 			System.out.println("Enter Choice : \n1.Login\n2.Register\n3.Exit");
-			int ch = ob.nextInt();
+			int choice = scannerObj.nextInt();
 			
-			 switch(ch)
+			 switch(choice)
 			 {
 			 
 			 case 1:
 				 
-			int st= tt.login();
+			int result= transactionManagementObj.login();
 				
-				if( st == 0 )
+				if( result == 0 )
 				{
 					System.out.println("Account Not Found .. ! ");
 				}
-				else if( st < 0 )
-				{
-					System.out.println("Email and Password Mismatch..");
-				}
-				 
+				
 				 break;
 				 
 			 case 2:
 				 
-				  tt.register();
+				 transactionManagementObj.register();
 				 
 				 break;
 			

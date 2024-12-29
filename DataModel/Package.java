@@ -78,8 +78,8 @@ public class Package {
 
 
 	public String toString() {
-		return "-------------------\n PackageID = " + PackageId + "\nPackageName = " + PackageName + ", \nPackageType = " + PackageType + ", \nPackageQuantity = "
-				+ PackageQuantity + ", \nPackageWeight = " + PackageWeight + ",\n PackageRate = " + PackageRate
+		return "-------------------\nPackageID = " + PackageId + "\nPackageName = " + PackageName + ", \nPackageType = " + PackageType + ", \nPackageQuantity = "
+				+ PackageQuantity + ", \nPackageWeight = " + PackageWeight + ",\nPackageRate = " + PackageRate
 				+ "";
 	}
 	
